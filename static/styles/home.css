@@ -1,0 +1,20 @@
+#hero-carousel .carousel-item img {
+    object-fit: cover;
+    object-position: center;
+    height: 70vh;
+    overflow: hidden;
+  }
+
+  #hero-carousel .carousel-item:before {
+    content: "";
+    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  body{
+    background-color: aliceblue;
+  }
