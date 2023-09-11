@@ -1,1 +1,4 @@
 tradingenv/
+exo/
+__pycache__
+requirements_dev.txt

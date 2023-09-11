@@ -1,0 +1,743 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results{% endblock title %}
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+    <!-- Hi {{ user.email }}!
+    <p><a href="{% url 'logout' %}">Log Out</a></p> -->
+    {% if errors %}
+      <section id="errorSection">
+        <div class="alert alert-danger" role="alert">
+          <h4 class="alert-heading">Error!</h4>
+          <p>{{ errors.description }}</p>
+          <hr>
+          {% if errors.message %}
+          <p class="mb-0">{{ errors.message }}</p>
+          {% else %}
+          <p class="mb-0">Please fix these errors and try again</p>
+          {% endif %}
+        </div>
+      </section>
+      <!-- <section id="searchForm">
+        <form action="{% url 'search' %}" method="post">
+          {% csrf_token %}
+          <div class="container text-center justify-content-center  my-2">
+            <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+            <div class="row my-4">
+              <div class="col-md-4 my-2">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-box-seam-fill"></i>
+                  </span>
+                  <input type="text" class="form-control" value="{{ form_product }}" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name">
+                </div>             
+              </div>
+              <div class="col-md-3 my-2">
+                <select id="inputState" class="form-select" name="trade type">
+                  {% if form_trade == 'Export To' %}
+                    <option selected>Export</option>
+                    <option>Import</option>
+                  {% else %}
+                    <option>Export</option>
+                    <option selected>Import</option>
+                  {% endif %}
+                </select>
+              </div>
+              <div class="col-md-3 my-2">
+                <input type="text" class="form-control" value="{{ form_country }}" id="inputZip" placeholder="Choose A Country"  name="country" >
+              </div>
+              <div class="col-md-2 my-2">
+                <input type="submit" name="Search" class="btn btn-success text-center">
+              </div>
+            </div>
+            <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+          </div>
+        </form>
+      </section> -->
+
+    <section id="searchForm">
+      <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        <div class="container text-center justify-content-center  my-2">
+          <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+          <div class="row my-4">
+            <div class="col-md-4 my-2">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-box-seam-fill"></i>
+                </span>
+                <!-- <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name"> -->
+                <select class="form-select" id="selectAccordion" name="product name">
+                  
+                  {% for category in categories %}
+                    {% if form_product %}
+                    <option selected value="{{ form_product }}">{{ form_product }}</option>
+                    {% else %}
+                    <option selected>Enter Product or Service / HS Code</option>
+                    {% endif %}
+                    <optgroup label="{{ category.name }}" class="fs-3"></optgroup>
+                      {% for product in products %}
+                        {% if product.category.id == category.id  %}
+                          <option value="{{ product.description }}">{{ product.custom_code }}: {{ product.description }}</option>
+                        {% endif %}
+                    </optgroup>
+                      {% endfor %}
+                  {% endfor %}
+                </select>
+              
+              </div>             
+            </div>
+            <div class="col-md-3 my-2">
+              <select id="inputState" class="form-select" name="trade type">
+                {% if form_trade == 'Export' %}
+                  <option selected>Export</option>
+                  <option>Import</option>
+                {% else %}
+                  <option>Export</option>
+                  <option selected>Import</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="col-md-3 my-2">
+              <!-- <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country"  name="country" > -->
+              <select class="form-select" id="inputZip" name="country">
+                {% if form_country %}
+                <option selected value="{{ form_country }}">{{ form_country }}</option>
+                  {% for country in countries %}
+                    <option value="{{ country.name }}">{{ country.name }}</option>
+                  {% endfor %}
+                {% else %}
+                <option selected>Select a Country</option>
+                {% for country in countries %}
+                    <option value="{{ country.name }}">{{ country.name }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
+            <div class="col-md-2 my-2">
+              <input type="submit" name="Search" class="btn btn-success text-center">
+            </div>
+          </div>
+          <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+        </div>
+      </form>
+    </section>
+
+    <section id="footer">
+      <!-- Footer -->
+    <footer class="text-center text-lg-start bg-white text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+    
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+    
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3 text-secondary"></i>Uganda Trading Portal
+            </h6>
+            <p>
+             Developed by Extrovert Technologies
+            </p>
+          </div>
+          <!-- Grid column -->
+    
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Get In Touch</h6>
+            <p><i class="fas fa-home me-3 text-secondary"></i>Prince House, Kyanja - Kampala</p>
+            <p><i class="fas fa-home me-3 text-secondary"></i>+256772358797</p>
+            <p>
+              <i class="fas fa-envelope me-3 text-secondary"></i>
+              info@extrovertechnologies.com
+            </p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+    
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+      © 2021 Copyright:
+      <a class="text-reset fw-bold" href="http://extrovertechnologies.com/">Extrovert.com</a>
+    </div>
+    <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+    </section>
+      
+      
+
+    {% else %}
+
+    <section id="searchForm">
+      <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        <div class="container text-center justify-content-center  my-2">
+          <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+          <div class="row my-4">
+            <div class="col-md-4 my-2">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-box-seam-fill"></i>
+                </span>
+                <!-- <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name"> -->
+                <select class="form-select" id="selectAccordion" name="product name">
+                  
+                  {% for category in categories %}
+                    {% if selected_product %}
+                    <option selected value="{{ selected_product.description }}">{{ selected_product.custom_code }}: {{ selected_product.description }}</option>
+                    {% else %}
+                    <option selected>Enter Product or Service / HS Code</option>
+                    {% endif %}
+                    <optgroup label="{{ category.name }}" class="fs-3"></optgroup>
+                      {% for product in products %}
+                        {% if product.category.id == category.id  %}
+                          <option value="{{ product.description }}">{{ product.custom_code }}: {{ product.description }}</option>
+                        {% endif %}
+                    </optgroup>
+                      {% endfor %}
+                  {% endfor %}
+                </select>
+              
+              </div>             
+            </div>
+            <div class="col-md-3 my-2">
+              <select id="inputState" class="form-select" name="trade type">
+                {% if trade.trade_choice == 'Export To' %}
+                  <option selected>Export</option>
+                  <option>Import</option>
+                {% else %}
+                  <option>Export</option>
+                  <option selected>Import</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="col-md-3 my-2">
+              <!-- <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country"  name="country" > -->
+              <select class="form-select" id="inputZip" name="country">
+                {% if selected_country %}
+                <option selected>{{ selected_country.name }}</option>
+                  {% for country in countries %}
+                    <option value="{{ country.name }}">{{ country.name }}</option>
+                  {% endfor %}
+                {% else %}
+                <option selected>Select a Country</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="col-md-2 my-2">
+              <input type="submit" name="Search" class="btn btn-success text-center">
+            </div>
+          </div>
+          <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+        </div>
+      </form>
+    </section>
+
+    <section class="searchResults">
+      <div class="card mb-3">
+        <div class="card-body mx-auto">
+          <h5 class="card-title">{{ trade.product.description }}</h5>
+          <p class="card-text">Product Category: {{ trade.product.category.name }}</p>
+          <p class="card-text">Quantity: {{ trade.quantity }}</p>
+          <p class="card-text">US Dollar Value: {{ trade.dollar_value }}</p>
+          <p class="card-text">UG Shillings Value: {{ trade.shillings_value }}</p>
+          <p class="card-text">US Dollar Value: {{ trade.dollar_value }}</p>
+          <p class="card-text"><small class="text-muted"></small>Product Category: {{ trade.product.category.name }}</small></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="footer">
+      <!-- Footer -->
+    <footer class="text-center text-lg-start bg-white text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+    
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 link-secondary">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+    
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3 text-secondary"></i>Uganda Trading Portal
+            </h6>
+            <p>
+             Developed by Extrovert Technologies
+            </p>
+          </div>
+          <!-- Grid column -->
+    
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Get In Touch</h6>
+            <p><i class="fas fa-home me-3 text-secondary"></i>Prince House, Kyanja - Kampala</p>
+            <p><i class="fas fa-home me-3 text-secondary"></i>+256772358797</p>
+            <p>
+              <i class="fas fa-envelope me-3 text-secondary"></i>
+              info@extrovertechnologies.com
+            </p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+    
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+      © 2021 Copyright:
+      <a class="text-reset fw-bold" href="http://extrovertechnologies.com/">Extrovert.com</a>
+    </div>
+    <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+    </section>
+    {% endif %}
+
+{% else %}
+    <!-- <p>You are not logged in</p>
+    <a href="{% url 'login' %}">Log In</a> |
+    <a href="{% url 'signup' %}">Sign Up</a> -->
+    <!-- Intro Section -->
+    {% if errors %}
+      <section id="errorSection">
+        <div class="alert alert-danger mx-auto" role="alert">
+          <h4 class="alert-heading">Error!</h4>
+          <p>{{ errors.description }}</p>
+          <hr>
+          {% if errors.message %}
+          <p class="mb-0">{{ errors.message }}</p>
+          {% else %}
+          <p class="mb-0">Please fix these errors and try again</p>
+          {% endif %}
+        </div>
+      </section>
+      <section id="searchForm">
+        <form action="{% url 'search' %}" method="post">
+          {% csrf_token %}
+          <div class="container text-center justify-content-center  my-2">
+            <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+            <div class="row my-4">
+              <div class="col-md-4 my-2">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-box-seam-fill"></i>
+                  </span>
+                  <!-- <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name"> -->
+                  <select class="form-select" id="selectAccordion" name="product name">
+                    
+                    {% for category in categories %}
+                      {% if form_product %}
+                      <option selected value="{{ form_product }}">{{ form_product }}</option>
+                      {% else %}
+                      <option selected>Enter Product or Service / HS Code</option>
+                      {% endif %}
+                      <optgroup label="{{ category.name }}" class="fs-3"></optgroup>
+                        {% for product in products %}
+                          {% if product.category.id == category.id  %}
+                            <option value="{{ product.description }}">{{ product.custom_code }}: {{ product.description }}</option>
+                          {% endif %}
+                      </optgroup>
+                        {% endfor %}
+                    {% endfor %}
+                  </select>
+                
+                </div>             
+              </div>
+              <div class="col-md-3 my-2">
+                <select id="inputState" class="form-select" name="trade type">
+                  {% if form_trade == 'Export' %}
+                    <option selected>Export</option>
+                    <option>Import</option>
+                  {% else %}
+                    <option>Export</option>
+                    <option selected>Import</option>
+                  {% endif %}
+                </select>
+              </div>
+              <div class="col-md-3 my-2">
+                <!-- <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country"  name="country" > -->
+                <select class="form-select" id="inputZip" name="country">
+                  {% if form_country %}
+                  <option selected value="{{ form_country }}">{{ form_country }}</option>
+                    {% for country in countries %}
+                      <option value="{{ country.name }}">{{ country.name }}</option>
+                    {% endfor %}
+                  {% else %}
+                  <option selected>Select a Country</option>
+                  {% for country in countries %}
+                      <option value="{{ country.name }}">{{ country.name }}</option>
+                    {% endfor %}
+                  {% endif %}
+                </select>
+              </div>
+              <div class="col-md-2 my-2">
+                <input type="submit" name="Search" class="btn btn-success text-center">
+              </div>
+            </div>
+            <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+          </div>
+        </form>
+      </section>
+
+      <section id="footer">
+        <!-- Footer -->
+      <footer class="text-center text-lg-start bg-white text-muted">
+      <!-- Section: Social media -->
+      <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+          <span>Get connected with us on social networks:</span>
+        </div>
+        <!-- Left -->
+      
+        <!-- Right -->
+        <div>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-google"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="" class="me-4 link-secondary">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+        <!-- Right -->
+      </section>
+      <!-- Section: Social media -->
+      
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <!-- Content -->
+              <h6 class="text-uppercase fw-bold mb-4">
+                <i class="fas fa-gem me-3 text-secondary"></i>Uganda Trading Portal
+              </h6>
+              <p>
+               Developed by Extrovert Technologies
+              </p>
+            </div>
+            <!-- Grid column -->
+      
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold mb-4">Get In Touch</h6>
+              <p><i class="fas fa-home me-3 text-secondary"></i>Prince House, Kyanja - Kampala</p>
+              <p><i class="fas fa-home me-3 text-secondary"></i>+256772358797</p>
+              <p>
+                <i class="fas fa-envelope me-3 text-secondary"></i>
+                info@extrovertechnologies.com
+              </p>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+      
+      <!-- Copyright -->
+      <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+        © 2021 Copyright:
+        <a class="text-reset fw-bold" href="http://extrovertechnologies.com/">Extrovert.com</a>
+      </div>
+      <!-- Copyright -->
+      </footer>
+      <!-- Footer -->
+      </section>
+      
+    {% else %}
+
+    <!-- <section id="searchForm">
+      <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        <div class="container text-center justify-content-center  my-2">
+          <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+          <div class="row my-4">
+            <div class="col-md-4 my-2">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-box-seam-fill"></i>
+                </span>
+                <input type="text" class="form-control" value="{{ selected_product.description }}" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name">
+              </div>             
+            </div>
+            <div class="col-md-3 my-2">
+              <select id="inputState" class="form-select" name="trade type">
+                <option selected>{{ trade.trade_choice }}</option>
+                <option>Export</option>
+                <option>Import</option>
+              </select>
+            </div>
+            <div class="col-md-3 my-2">
+              <input type="text" class="form-control" value="{{ selected_country.name }}" id="inputZip" placeholder="Choose A Country"  name="country" >
+            </div>
+            <div class="col-md-2 my-2">
+              <input type="submit" name="Search" class="btn btn-success text-center">
+            </div>
+          </div>
+          <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+        </div>
+      </form>
+    </section> -->
+
+    <section id="searchForm">
+      <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        <div class="container text-center justify-content-center  my-2">
+          <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+          <div class="row my-4">
+            <div class="col-md-4 my-2">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-box-seam-fill"></i>
+                </span>
+                <!-- <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name"> -->
+                <select class="form-select" id="selectAccordion" name="product name">
+                  
+                  {% for category in categories %}
+                    {% if selected_product %}
+                    <option selected value="{{ selected_product.description }}">{{ selected_product.custom_code }}: {{ selected_product.description }}</option>
+                    {% else %}
+                    <option selected>Enter Product or Service / HS Code</option>
+                    {% endif %}
+                    <optgroup label="{{ category.name }}" class="fs-3"></optgroup>
+                      {% for product in products %}
+                        {% if product.category.id == category.id  %}
+                          <option value="{{ product.description }}">{{ product.custom_code }}: {{ product.description }}</option>
+                        {% endif %}
+                    </optgroup>
+                      {% endfor %}
+                  {% endfor %}
+                </select>
+              
+              </div>             
+            </div>
+            <div class="col-md-3 my-2">
+              <select id="inputState" class="form-select" name="trade type">
+                {% if trade.trade_choice == 'Export To' %}
+                  <option selected>Export</option>
+                  <option>Import</option>
+                {% else %}
+                  <option>Export</option>
+                  <option selected>Import</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="col-md-3 my-2">
+              <!-- <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country"  name="country" > -->
+              <select class="form-select" id="inputZip" name="country">
+                {% if selected_country %}
+                <option selected>{{ selected_country.name }}</option>
+                  {% for country in countries %}
+                    <option value="{{ country.name }}">{{ country.name }}</option>
+                  {% endfor %}
+                {% else %}
+                <option selected>Select a Country</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="col-md-2 my-2">
+              <input type="submit" name="Search" class="btn btn-success text-center">
+            </div>
+          </div>
+          <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+        </div>
+      </form>
+    </section>
+
+    <section class="searchResults">
+      <div class="card mb-3">
+        <div class="card-body mx-auto">
+          <h5 class="card-title">{{ trade.product.description }}</h5>
+          <p class="card-text">Product Category: {{ trade.product.category.name }}</p>
+          <p class="card-text">Quantity: {{ trade.quantity }}</p>
+          <p class="card-text">US Dollar Value: {{ trade.dollar_value }}</p>
+          <p class="card-text">UG Shillings Value: {{ trade.shillings_value }}</p>
+          <p class="card-text">US Dollar Value: {{ trade.dollar_value }}</p>
+          <p class="card-text"><small class="text-muted"></small>Product Category: {{ trade.product.category.name }}</small></p>
+        </div>
+      </div>
+    </section>
+
+  <section id="footer">
+    <!-- Footer -->
+  <footer class="text-center text-lg-start bg-white text-muted">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <!-- Left -->
+    <div class="me-5 d-none d-lg-block">
+      <span>Get connected with us on social networks:</span>
+    </div>
+    <!-- Left -->
+  
+    <!-- Right -->
+    <div>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+  
+  <!-- Section: Links  -->
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3 text-secondary"></i>Uganda Trading Portal
+          </h6>
+          <p>
+           Developed by Extrovert Technologies
+          </p>
+        </div>
+        <!-- Grid column -->
+  
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Get In Touch</h6>
+          <p><i class="fas fa-home me-3 text-secondary"></i>Prince House, Kyanja - Kampala</p>
+          <p><i class="fas fa-home me-3 text-secondary"></i>+256772358797</p>
+          <p>
+            <i class="fas fa-envelope me-3 text-secondary"></i>
+            info@extrovertechnologies.com
+          </p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+  
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+    © 2021 Copyright:
+    <a class="text-reset fw-bold" href="http://extrovertechnologies.com/">Extrovert.com</a>
+  </div>
+  <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+  </section>
+
+  {% endif %}
+
+
+{% endif %}
+
+{% endblock content %}
