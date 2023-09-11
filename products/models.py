@@ -24,6 +24,9 @@ class ProductCategory(models.Model):
     hscode = models.CharField(max_length=15, unique=True, primary_key=True)
     product_type = models.CharField(choices=PRODUCT_TYPE, max_length=20, default="Product")
 
+    class Meta:
+        verbose_name_plural = "Product Categories"
+
     def __str__(self):
         return f"{self.name}: {self.product_type}"
 
@@ -55,6 +58,9 @@ class Trade(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=50, choices=country_names)
     trade = models.ForeignKey(Trade, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Countries"
 
     def __str__(self):
         return f"{self.trade.product.description}: {self.trade.trade_choice} ----> {self.name}"
