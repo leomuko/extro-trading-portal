@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core import serializers
 
-from .models import Product, ProductCategory, Trade, Year, Country
+from .models import Product, ProductCategory, Trade, Country
 from .utils import country_names
 # Create your views here.
 
@@ -12,13 +12,9 @@ def search_view(request):
     # countries = serializers.serialize('json', countries)
 
     if request.method == 'POST' or request.method == 'GET':
-        print(request.POST)
         product_name = request.POST.get('product name')
-        print(product_name)
         trade_type = request.POST.get('trade type')
-        print(trade_type)
         country = request.POST.get('country')
-        print(country)
 
         try: 
             if any(char.isdigit() for char in product_name):
@@ -35,9 +31,6 @@ def search_view(request):
             selected_trades = Trade.objects.filter(trade_choice=trade_choice,
                                                     product__id=selected_product.id)
 
-            print(selected_country)
-            print(selected_trades)
-
             for trade in selected_trades:
                 if selected_country.trade.id == trade.id:
                     print("Successful trade")
@@ -51,7 +44,6 @@ def search_view(request):
                                                                 })
 
                 else:
-                    print("None exsitent trade")
                     errors = {
                         "description": "None Existent Trade!",
                         "message": """
