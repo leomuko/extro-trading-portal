@@ -5,9 +5,58 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-    Hi {{ user.email }}!
-    <p><a href="{% url 'logout' %}">Log Out</a></p>
-
+    <!-- <p><a href="{% url 'logout' %}">Log Out</a></p> -->
+    <section id="searchForm">
+      <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        <div class="container text-center justify-content-center  my-2">
+          <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
+          <div class="row my-4">
+            <div class="col-md-4 my-2">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-box-seam-fill"></i>
+                </span>
+                <!-- <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name"> -->
+                <select class="form-select" id="selectAccordion" name="product name">
+                  <option selected>Enter Product or Service / HS Code</option>
+                  {% for category in categories %}
+                  <optgroup label="{{ category.name }}" class="fs-4"></optgroup>
+                  {% for product in products %}
+                      {% if product.category.id == category.id  %}
+                      <option value="{{ product.description }}">{{ product.custom_code }}: {{ product.description }}</option>
+                      {% endif %}
+                  </optgroup>
+                  {% endfor %}
+                  {% endfor %}
+                </select>
+              
+              </div>             
+            </div>
+            <div class="col-md-3 my-2">
+              <select id="inputState" class="form-select" name="trade type">
+                <option selected>Export to/ Import From</option>
+                <option>Export</option>
+                <option>Import</option>
+              </select>
+            </div>
+            <div class="col-md-3 my-2">
+              <!-- <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country"  name="country" > -->
+              <select class="form-select" id="inputZip" name="country">
+                <option selected>Enter A Country</option>
+                {% for country in countries %}
+                  <option value="{{ country.name }}">{{ country.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-2 my-2">
+              <input type="submit" name="Search" class="btn btn-success text-center">
+            </div>
+          </div>
+          <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
+        </div>
+      </form>
+    </section>
 {% else %}
     <!-- <p>You are not logged in</p>
     <a href="{% url 'login' %}">Log In</a> |
@@ -110,35 +159,55 @@
         </div>
     </section>
     <section id="searchForm">
+      <form action="{% url 'search' %}" method="post">
+        {% csrf_token %}
         <div class="container text-center justify-content-center  my-2">
           <h3 class="text-center">Three Steps to Get the best insight for expanding your business</h3>
           <div class="row my-4">
-            <div class="col-md-4">
+            <div class="col-md-4 my-2">
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bi bi-box-seam-fill"></i>
                 </span>
-                <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct">
-              </div>
-             
+                <!-- <input type="text" class="form-control" placeholder="Enter Product or Service / HS Code" id="inputProduct" name="product name"> -->
+                <select class="form-select" id="selectAccordion" name="product name">
+                  <option selected>Enter Product or Service / HS Code</option>
+                  {% for category in categories %}
+                  <optgroup label="{{ category.name }}" class="fs-4"></optgroup>
+                  {% for product in products %}
+                      {% if product.category.id == category.id  %}
+                      <option value="{{ product.description }}">{{ product.custom_code }}: {{ product.description }}</option>
+                      {% endif %}
+                  </optgroup>
+                  {% endfor %}
+                  {% endfor %}
+                </select>
+              
+              </div>             
             </div>
-            <div class="col-md-3">
-              <select id="inputState" class="form-select">
+            <div class="col-md-3 my-2">
+              <select id="inputState" class="form-select" name="trade type">
                 <option selected>Export to/ Import From</option>
                 <option>Export</option>
                 <option>Import</option>
               </select>
             </div>
-            <div class="col-md-3">
-              <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country">
+            <div class="col-md-3 my-2">
+              <!-- <input type="text" class="form-control" id="inputZip" placeholder="Choose A Country"  name="country" > -->
+              <select class="form-select" id="inputZip" name="country">
+                <option selected>Enter A Country</option>
+                {% for country in countries %}
+                  <option value="{{ country.name }}">{{ country.name }}</option>
+                {% endfor %}
+              </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 my-2">
               <input type="submit" name="Search" class="btn btn-success text-center">
             </div>
           </div>
           <h5>To find your HS code, simply search your business name in the Importers or Exporters Details pages</h5>
         </div>
-        
+      </form>
     </section>
 
     <section id="cards">
@@ -264,6 +333,9 @@
   <!-- Footer -->
   </section>
 
+  <!-- <script>
+      // var areas = JSON.parse('{{ countries|escapejs }}');
+  </script> -->
 
 {% endif %}
 

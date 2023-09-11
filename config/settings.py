@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
-import django_heroku
+# import django_heroku
+import django_on_heroku
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +44,9 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'crispy_forms',
 
-    'accounts'
+    # System apps
+    'accounts',
+    'products'
 ]
 
 MIDDLEWARE = [
@@ -129,7 +132,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static/"),
 )
 STATIC_ROOT = BASE_DIR / 'productionfiles'
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
+django_on_heroku.settings(locals())
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -143,3 +147,5 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+COUNTRY_MODEL = 'products.Country'
